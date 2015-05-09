@@ -49,3 +49,8 @@ def test_game_words():
     assert game_words(3,source) == ["sovellomgani"]
     assert game_words(1,source) == ["bajaj"]
     assert game_words(2,source) == ["mkulima"]
+
+def test_group_words():
+    assert group_words(word_list) == \
+    {4:["bird", "calf",], 5:["river","brain"], 6:["stream"],7:["kneecap","sneaker"],
+    8:["cookbook","language",], 9:["algorithm"],11:["integration"]}
