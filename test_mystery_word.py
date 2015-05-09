@@ -26,7 +26,6 @@ def test_random_word():
     word = pick_random_word(word_list)
     assert word in word_list
 
-
 def test_display_word():
     word = "integration"
     assert display_word(word, []) == "_ _ _ _ _ _ _ _ _ _ _"
@@ -44,3 +43,9 @@ def test_is_word_complete():
     assert not is_word_complete(word, ["r", "e"])
     assert not is_word_complete(word, ["r", "e", "z"])
     assert is_word_complete(word, ["r", "e", "v", "i"])
+
+def test_game_words():
+    source = 'words'
+    assert game_words(3,source) == ["sovellomgani"]
+    assert game_words(1,source) == ["bajaj"]
+    assert game_words(2,source) == ["mkulima"]

@@ -23,22 +23,22 @@ def get_easy_words(word_list):
 
     easy_words = []
     for word in word_list:
-        if len(word) >= 4 and len(word) <= 6:
-            easy_words.extend(word.lower().rsplit(','))
+        if len(word.strip()) >= 4 and len(word.strip()) <= 6:
+            easy_words.extend(word.lower().strip().rsplit(','))
     return easy_words
 
 def get_medium_words(word_list):
     medium_words = []
     for word in word_list:
-        if len(word) >= 6 and len(word) <= 8:
-            medium_words.extend(word.lower().rsplit(','))
+        if len(word.strip()) >= 6 and len(word.strip()) <= 8:
+            medium_words.extend(word.strip().lower().rsplit(','))
     return medium_words
 
 def get_hard_words(word_list):
     hard_words = []
     for word in word_list:
-        if len(word) >= 8:
-            hard_words.extend(word.lower().rsplit(','))
+        if len(word.strip()) >= 8:
+            hard_words.extend(word.strip().lower().rsplit(','))
     return hard_words
 
 def pick_random_word(word_list):
@@ -105,28 +105,46 @@ def game_level():
     4 - 'Evil Hangman' (If you want to be fooled by the computer, this is the choice)")
     return int(input("Please select the level of difficulty: "))
 
-def game_words(user_level_choice):
-    word_list = read_file_content('/usr/share/dict/words')
+def game_words(user_level_choice,word_source):
+    word_list = read_file_content(word_source)
 
     while user_level_choice not in [1, 2, 3]:
         user_level_choice = int(input("Please select the level of difficulty: "))
 
     if user_level_choice == 1:
         return get_easy_words(word_list)
-    elif user_level_choice == 2:
+    if user_level_choice == 2:
         return get_medium_words(word_list)
-    elif user_level_choice == 3:
+    if user_level_choice == 3:
         return get_hard_words(word_list)
 
 def quit():
     print("Bye")
     sys.exit()
 
+def group_words(word_list):
+    word_groups = {}
+    counter = 0
+    for word in word_list:
+        word = word.strip()
+        if len(word) in word_groups:
+            #remove if word in list
+            word_groups[len(word)].extend(word.lower().split())
+        else:
+            word_groups[len(word)] = [word]
+    return word_groups
+
+def play_hangman(words):
+    # get user word length which must exist in our dictionary
+    word_length = input("What length of the word do you want?")
+    # take user guess
+
+    # display the word skeleton
 def play(user_choice):
     while True:
         if user_choice == 'y':
             user_level_choice = game_level()
-            words = game_words(user_level_choice)
+            words = game_words(user_level_choice,'/usr/share/dict/words')
 
         elif user_choice == 'n' or user_choice == 'exit':
             quit()
@@ -173,3 +191,8 @@ if __name__ == '__main__':
     print("You can quit the game anytime by typing EXIT")
     user_choice = game_continue()
     play(user_choice)
+    #word_list = read_file_content('/usr/share/dict/words')
+
+    #words = group_words(word_list)
+    #for indx in words:
+    #    print("{} : has {}".format(indx,words[indx]))
