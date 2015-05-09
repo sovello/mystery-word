@@ -134,10 +134,13 @@ def group_words(word_list):
             word_groups[len(word)] = [word]
     return word_groups
 
-def play_hangman(words):
+def play_evil_hangman(words):
     # get user word length which must exist in our dictionary
     word_length = input("What length of the word do you want?")
-    # take user guess
+    #return words matching the dictionary length
+
+def play_hangman(words):
+    pass
 
     # display the word skeleton
 def play(user_choice):
@@ -146,45 +149,44 @@ def play(user_choice):
             user_level_choice = game_level()
             words = game_words(user_level_choice,'/usr/share/dict/words')
 
-        elif user_choice == 'n' or user_choice == 'exit':
-            quit()
-        picked_word = pick_random_word(words)
+            picked_word = pick_random_word(words)
 
-        guess = get_user_guess()
-        if guess != 'exit':
-            guessed_characters = []
-            wrong_guess_counts = 0
-            wrong_guess = []
-            counter = 0
-            while counter < len(picked_word.strip()) and wrong_guess_counts < 8:
-                if guess not in picked_word:
-                    if guess in wrong_guess:
-                        print("You already guessed this and it was not there!")
-                        guess = get_user_guess()
-                    else:
-                        wrong_guess_counts += 1
-                        if wrong_guess_counts < 8:
-                            print("You lost! ".format(guess))
-                            print("You are remained with {} guesses to lose the game".format(8-wrong_guess_counts))
-                            wrong_guess.extend(guess.split(','))
+            guess = get_user_guess()
+            if guess != 'exit':
+                guessed_characters = []
+                wrong_guess_counts = 0
+                wrong_guess = []
+                counter = 0
+                while counter < len(picked_word.strip()) and wrong_guess_counts < 8:
+                    if guess not in picked_word:
+                        if guess in wrong_guess:
+                            print("You already guessed this and it was not there!")
                             guess = get_user_guess()
                         else:
-                            print("You lost this round.")
-                            print("The word was {}".format(picked_word.upper()))
-                            user_choice = game_continue()
+                            wrong_guess_counts += 1
+                            if wrong_guess_counts < 8:
+                                print("You lost! ".format(guess))
+                                print("You are remained with {} guesses to lose the game".format(8-wrong_guess_counts))
+                                wrong_guess.extend(guess.split(','))
+                                guess = get_user_guess()
+                            else:
+                                print("You lost this round.")
+                                print("The word was {}".format(picked_word.upper()))
+                                user_choice = game_continue()
 
-                else:
-                    guessed_characters.extend(guess.split(','))
-                    display = display_word(picked_word.strip(), guessed_characters)
-                    counter = len(re.sub(r'[^A-Za-z]','',display))
-                    print(display)
-                    if is_word_complete(picked_word.strip(), guessed_characters):
-                        print("Whoa! You skinned it!")
-                        user_choice = game_continue()
                     else:
-                        guess = get_user_guess()
+                        guessed_characters.extend(guess.split(','))
+                        display = display_word(picked_word.strip(), guessed_characters)
+                        counter = len(re.sub(r'[^A-Za-z]','',display))
+                        print(display)
+                        if is_word_complete(picked_word.strip(), guessed_characters):
+                            print("Whoa! You skinned it!")
+                            user_choice = game_continue()
+                        else:
+                            guess = get_user_guess()
         else:
             quit()
+
 
 if __name__ == '__main__':
     print("Welcome to Hangman!!!")
