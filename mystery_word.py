@@ -134,10 +134,76 @@ def group_words(word_list):
             word_groups[len(word)] = [word]
     return word_groups
 
+
+def word_families(letter, words):
+    unmatched_words = []
+    matched_words = []
+    for word in words:
+        if letter not in word:
+            unmatched_words.append(word.split())
+        else: # letter is in word
+            matched_words.append(word.split())
+            # bias the game:
+                # those with letter on the first position
+                # those with letter on a certain random position
+                # those with more than one occurrence of the letter
+    return unmatched_words, matched_words
+
 def play_evil_hangman(words):
-    # get user word length which must exist in our dictionary
-    word_length = input("What length of the word do you want?")
-    #return words matching the dictionary length
+    # fetch all the words
+    grouped_words = group_words(words)
+    word_length = 'xyz'
+    # return words matching the dictionary length
+    while word_length not in grouped_words:
+        # get user word length which must exist in our dictionary
+        word_length = int(input("What length of the word do you want? "))
+    this_round_words = grouped_words[word_length]
+    # let the user make a guess
+    guess = get_user_guess()
+
+    if guess != 'exit':
+        # create word families based on the guessed letter
+        word_family = word_families(guess, this_round_words)
+        # select the largest family of words containing the letter
+        unmatched_words = word_family[0]
+        # if the largest family in the group doesn't contain a letter, pick that one
+
+        guessed_characters = []
+        wrong_guess_counts = 0
+        wrong_guess = []
+        counter = 0
+        while counter < len(picked_word.strip()) and wrong_guess_counts < 8:
+            if guess not in picked_word:
+                if guess in wrong_guess:
+                    print("You already guessed this and it was not there!")
+                    guess = get_user_guess()
+                else:
+                    wrong_guess_counts += 1
+                    if wrong_guess_counts < 8:
+                        print("You lost! ".format(guess))
+                        print("You are remained with {} guesses to lose the game".format(8-wrong_guess_counts))
+                        wrong_guess.extend(guess.split(','))
+                        guess = get_user_guess()
+                    else:
+                        print("You lost this round.")
+                        print("The word was {}".format(picked_word.upper()))
+                        user_choice = game_continue()
+
+            else:
+                if guess in guessed_characters:
+                    print("You already guessed this and it was not there!")
+                    guess = get_user_guess()
+                else:
+                    guessed_characters.extend(guess.split(','))
+                    display = display_word(picked_word.strip(), guessed_characters)
+                    counter = len(re.sub(r'[^A-Za-z]','',display))
+                    print(display)
+                    if is_word_complete(picked_word.strip(), guessed_characters):
+                        print("Whoa! You skinned it!")
+                        user_choice = game_continue()
+                    else:
+                        guess = get_user_guess()
+
 
 def play_hangman(words):
     pass
@@ -175,15 +241,19 @@ def play(user_choice):
                                 user_choice = game_continue()
 
                     else:
-                        guessed_characters.extend(guess.split(','))
-                        display = display_word(picked_word.strip(), guessed_characters)
-                        counter = len(re.sub(r'[^A-Za-z]','',display))
-                        print(display)
-                        if is_word_complete(picked_word.strip(), guessed_characters):
-                            print("Whoa! You skinned it!")
-                            user_choice = game_continue()
-                        else:
+                        if guess in guessed_characters:
+                            print("You already guessed this and it was not there!")
                             guess = get_user_guess()
+                        else:
+                            guessed_characters.extend(guess.split(','))
+                            display = display_word(picked_word.strip(), guessed_characters)
+                            counter = len(re.sub(r'[^A-Za-z]','',display))
+                            print(display)
+                            if is_word_complete(picked_word.strip(), guessed_characters):
+                                print("Whoa! You skinned it!")
+                                user_choice = game_continue()
+                            else:
+                                guess = get_user_guess()
         else:
             quit()
 
@@ -191,10 +261,11 @@ def play(user_choice):
 if __name__ == '__main__':
     print("Welcome to Hangman!!!")
     print("You can quit the game anytime by typing EXIT")
-    user_choice = game_continue()
-    play(user_choice)
+    #user_choice = game_continue()
+    #play(user_choice)
     #word_list = read_file_content('/usr/share/dict/words')
+    #word_list = read_file_content('dictionary.txt')
 
-    #words = group_words(word_list)
-    #for indx in words:
-    #    print("{} : has {}".format(indx,words[indx]))
+    #play_evil_hangman(word_list)
+    names = ['Sovello','Juma','Fried','Conso','Jomera','Anand','Singh','Spur']
+    print( word_families('o', names) )
