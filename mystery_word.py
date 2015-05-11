@@ -261,11 +261,6 @@ def play(user_choice):
 if __name__ == '__main__':
     print("Welcome to Hangman!!!")
     print("You can quit the game anytime by typing EXIT")
-    #user_choice = game_continue()
-    #play(user_choice)
-    #word_list = read_file_content('/usr/share/dict/words')
-    #word_list = read_file_content('dictionary.txt')
-
-    #play_evil_hangman(word_list)
-    names = ['Sovello','Juma','Fried','Conso','Jomera','Anand','Singh','Spur']
-    print( word_families('o', names) )
+    user_choice = game_continue()
+    play(user_choice)
+    
